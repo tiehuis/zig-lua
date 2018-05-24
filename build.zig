@@ -8,7 +8,6 @@ pub fn build(b: &Builder) void {
     exe.linkSystemLibrary("c");
     b.addCIncludePath("lua-5.3.4/src");
 
-    // Build the embedded lua into a static archive first
     const lua_c_files = [][]const u8 {
         "lapi.c",
         "lauxlib.c",
