@@ -4,7 +4,7 @@ use @cImport({
     @cInclude("lauxlib.h");
 });
 
-export fn add(s: ?&lua_State) c_int {
+export fn add(s: ?*lua_State) c_int {
     const a = luaL_checkinteger(s, 1);
     const b = luaL_checkinteger(s, 2);
 
