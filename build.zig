@@ -6,13 +6,12 @@ pub fn build(b: *Builder) void {
     exe.setBuildMode(mode);
 
     exe.linkSystemLibrary("c");
-    b.addCIncludePath("lua-5.3.4/src");
+    exe.addIncludeDir("lua-5.4.2/src");
 
-    const lua_c_files = [][]const u8 {
+    const lua_c_files = [_][]const u8{
         "lapi.c",
         "lauxlib.c",
         "lbaselib.c",
-        "lbitlib.c",
         "lcode.c",
         "lcorolib.c",
         "lctype.c",
@@ -45,11 +44,11 @@ pub fn build(b: *Builder) void {
     };
 
     inline for (lua_c_files) |c_file| {
-        const c_obj = b.addCObject(c_file, "lua-5.3.4/src/" ++ c_file);
+        const c_obj = b.addObject(c_file, "lua-5.4.2/src/" ++ c_file);
         exe.addObject(c_obj);
     }
 
-    exe.setOutputPath("./lua_example");
+    exe.setOutputDir(".");
 
     b.default_step.dependOn(&exe.step);
     b.installArtifact(exe);
