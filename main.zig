@@ -18,9 +18,7 @@ pub fn main() void {
     var s = lua.luaL_newstate();
     lua.luaL_openlibs(s);
 
-    // TODO translate-c: lua_pushcfunction
-    lua.lua_pushcclosure(s, add, 0);
-    lua.lua_setglobal(s, "zig_add");
+    lua.lua_register(s, "zig_add", add);
 
     // TODO translate-c: luaL_dostring
     _ = lua.luaL_loadstring(s, "print(zig_add(3, 5))");
