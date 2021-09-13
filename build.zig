@@ -5,10 +5,10 @@ pub fn build(b: *Builder) void {
     const exe = b.addExecutable("lua_example", "main.zig");
     exe.setBuildMode(mode);
 
-    exe.linkSystemLibrary("c");
-    b.addCIncludePath("lua-5.3.4/src");
+    exe.linkLibC();
+    exe.addIncludeDir("lua-5.3.4/src");
 
-    const lua_c_files = [][]const u8 {
+    const lua_c_files = [_][]const u8{
         "lapi.c",
         "lauxlib.c",
         "lbaselib.c",
@@ -44,12 +44,16 @@ pub fn build(b: *Builder) void {
         "lzio.c",
     };
 
+    const c_flags = [_][]const u8{
+        "-std=c99",
+        "-O2",
+    };
+
     inline for (lua_c_files) |c_file| {
-        const c_obj = b.addCObject(c_file, "lua-5.3.4/src/" ++ c_file);
-        exe.addObject(c_obj);
+        exe.addCSourceFile("lua-5.3.4/src/" ++ c_file, &c_flags);
     }
 
-    exe.setOutputPath("./lua_example");
+    exe.setOutputDir(".");
 
     b.default_step.dependOn(&exe.step);
     b.installArtifact(exe);
